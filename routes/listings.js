@@ -6,36 +6,28 @@ const wrapAsync = require("../utils/Wrapasync.js");
 const Listing = require("../models/listingsSchema");
 const { isloggedin, isOwner, validatelisting } = require("../middlewares.js");
 const listingController = require("../controllers/listingController.js");
-const multer  = require('multer')
-const {storage}=require("../cloudConfig")
-const upload = multer({storage })
-// Index route 
-router.get("/",wrapAsync(listingController.index));
+const multer = require("multer");
+const { storage } = require("../cloudConfig");
+const upload = multer({ storage });
+// Index route
+router.get("/", wrapAsync(listingController.index));
 
 // New form for creating new listing
- router.get("/new", isloggedin,listingController.newListingform );
+router.get("/new", isloggedin, listingController.newListingform);
 
-
-router.route("/:id")
-.put(isloggedin,
-  isOwner,
-  upload.single("listing[image]"),
-  validatelisting,
-  wrapAsync(listingController.updateListing)
-)
-.delete(
-  isloggedin,
-  isOwner,
-  wrapAsync(listingController.deleteListing)
-);
+router
+  .route("/:id")
+  .put(
+    isloggedin,
+    isOwner,
+    upload.single("listing[image]"),
+    validatelisting,
+    wrapAsync(listingController.updateListing)
+  )
+  .delete(isloggedin, isOwner, wrapAsync(listingController.deleteListing));
 
 // Show route
-router.get(
-  "/:id/showroute",
-  wrapAsync(listingController.showListing)
-);
-
-
+router.get("/:id/showroute", wrapAsync(listingController.showListing));
 
 // Create Listing
 router.post(
@@ -46,8 +38,6 @@ router.post(
   wrapAsync(listingController.createListing)
 );
 
-
-
 // Edit Listing`
 router.get(
   "/:id/edit",
@@ -55,7 +45,5 @@ router.get(
   isOwner,
   wrapAsync(listingController.editListing)
 );
-
-
 
 module.exports = router;

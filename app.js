@@ -115,6 +115,7 @@ app.get("/demouser", async (req, res) => {
 });
 
 //Routes using express router
+app.use("/", listingsRouter);
 app.use("/listings", listingsRouter);
 app.use("/listings/:id/review", reviewsRouter);
 app.use("/", userRouter);
