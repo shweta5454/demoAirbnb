@@ -35,12 +35,7 @@ main()
   .catch((err) => console.log(err));
 
 async function main() {
-  await mongoose.connect(ATLAS_DB,{
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  ssl: true, // Explicitly set SSL to true
-  tlsAllowInvalidCertificates: false, // Avoid self-signed issues
-});
+  await mongoose.connect(ATLAS_DB);
 }
 
 //set ejs engine and  view folder path for server side rendering
@@ -58,7 +53,7 @@ app.engine("ejs", ejsMate);
 const store = MongoStore.create({
   mongoUrl: ATLAS_DB,
   crypto: {
-    secret: "mysecretkey",
+    secret: process.env.SECRET,
   },
   touchAfter: 24 * 3600,
 });
@@ -67,7 +62,7 @@ store.on("error", (err) => {
 });
 const sessionOptions = {
   store,
-  secret: "mysecretkey",
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {
